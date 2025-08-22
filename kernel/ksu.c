@@ -60,6 +60,10 @@ int __init kernelsu_init(void)
 	pr_alert("*************************************************************");
 #endif
 
+#ifdef CONFIG_KSU_SUSFS
+	susfs_init();
+#endif
+	
 	ksu_core_init();
 
 	ksu_workqueue = alloc_ordered_workqueue("kernelsu_work_queue", 0);
@@ -67,8 +71,10 @@ int __init kernelsu_init(void)
 	ksu_allowlist_init();
 
 	ksu_throne_tracker_init();
-#ifdef CONFIG_KSU_KPROBES_HOOK
+
 	ksu_sucompat_init();
+	
+#ifdef CONFIG_KSU_KPROBES_HOOK
 	ksu_ksud_init();
 #else
  	pr_alert("KPROBES is disabled, KernelSU may not work, please check https://kernelsu.org/guide/how-to-integrate-for-non-gki.html");
@@ -103,6 +109,8 @@ void kernelsu_exit(void)
     ksu_trace_unregister();
 #endif
 
+    ksu_sucompat_exit();
+	
 	ksu_core_exit();
 }
 
