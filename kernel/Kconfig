@@ -2,7 +2,6 @@ menu "KernelSU"
 
 config KSU
 	tristate "KernelSU function support"
-	depends on OVERLAY_FS
 	default y
 	help
 	  Enable kernel-level root privileges on Android System.
@@ -15,6 +14,29 @@ config KSU_DEBUG
 	default n
 	help
 	  Enable KernelSU debug mode.
+
+config KSU_MULTI_MANAGER_SUPPORT
+    bool "Multi KernelSU manager support"
+    depends on KSU
+    default n
+    help
+	    Enable multi KernelSU manager support
+
+config KSU_ALLOWLIST_WORKAROUND
+    bool "KernelSU Session Keyring Init workaround"
+    depends on KSU
+    default n
+    help
+      Enable session keyring init workaround for problematic devices.
+      Useful for situations where the SU allowlist is not kept after a reboot
+
+config KSU_CMDLINE
+	  bool "Enable KernelSU cmdline"
+	  depends on KSU && KSU != m
+	  default n
+	  help
+	    Enable a cmdline called kernelsu.enabled
+	    Value 1 means enabled, value 0 means disabled.
 
 config KPM
 	bool "Enable SukiSU KPM"
